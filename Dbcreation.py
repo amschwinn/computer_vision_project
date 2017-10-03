@@ -15,8 +15,6 @@ conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
 
 os.listdir('C:/Users/jerem/Desktop/M2/CV/VOCdevkit/VOC2007/Annotations')
 
-
-
 #Definition of the SQL request to add objects and images
 sql_add_img = "INSERT INTO `images` (`num_img`, `flickr_id`,`width`, `height`,`depth`) VALUES (%s, %s, %s, %s, %s)"
 sql_add_object = "INSERT INTO `objects` (`num_img`, `name`,`pose`, `truncated`,`difficulty`,`xmin`,`ymin`,`xmax`,`ymax`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
