@@ -21,11 +21,8 @@ import time
 from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
 
-#Store key points and descriptions
-kp_brisk = [] 
-dsc_brisk = []
-kp_sift = [] 
-dsc_sift = []
+#Store descriptors
+descriptors = []
 #images = []
 
 #Set directory path for image folders
@@ -59,11 +56,9 @@ for filename in os.listdir(folder):
             print(filename)
             print(filename[4:filename.index('_',5)])
         #Store the keypoints and descriptors   
-        dsc_brisk.append({'obj':filename[4:filename.index('_',5)],
-            'brisk':d_brisk})
-        dsc_sift.append({'obj':filename[4:filename.index('_',5)],
-            'sift':d_sift})
-    
+        descriptors.append({'obj':filename[4:filename.index('_',5)],
+            'brisk':d_brisk,'sift':d_sift})
+
         #Draw and show kepoints on image
         #img2 = cv2.drawKeypoints(img,kp,img,color=(0,255,0), flags=0)
         #plt.imshow(img2),plt.show()
@@ -72,8 +67,5 @@ for filename in os.listdir(folder):
 end=time.time()
 print(end - start)
 
-#%%
-check = dsc_brisk[1]['brisk']
-check2 = dsc_brisk[0]['brisk']
 
-check3 = numpy.stack(check,check2)
+#%%
