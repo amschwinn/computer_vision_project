@@ -12,23 +12,28 @@ Oussama Bouldjedri
 
 October 3, 2017
 """
-#%%
+
 import numpy as np
 import pandas as pd
 import cv2
 import os
 import time
-from matplotlib import pyplot as plt
-import matplotlib.image as mpimg
+import pymysql
+import pymysql.cursors
+import json
 
 #Store descriptors
 descriptors = []
 #images = []
 
-#Set directory path for image folders
-folder="C:/Users/schwi/Google Drive/MLDM/Computer Vision Project/Data/obj_extracted/"    
+# Connect to the database.
+conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
 
-#%%
+sql_insert_desc = "INSERT INTO `desc_obj` (`id_obj`,`desc_json`) VALUES (%s, %s)"
+
+#Set directory path for image folders
+folder="C:/Users/jerem/Documents/obj/"    
+
 #Track run time
 start=time.time()
 
@@ -52,20 +57,20 @@ for filename in os.listdir(folder):
         #Computer keypoints and descriptors
         k_brisk,d_brisk = brisk.compute(gray,k_brisk)
         k_sift,d_sift = brisk.compute(gray,k_sift)
-        if d_brisk == None:
-            print(filename)
-            print(filename[4:filename.index('_',5)])
-        #Store the keypoints and descriptors   
-        descriptors.append({'obj':filename[4:filename.index('_',5)],
-            'brisk':d_brisk,'sift':d_sift})
-
-        #Draw and show kepoints on image
-        #img2 = cv2.drawKeypoints(img,kp,img,color=(0,255,0), flags=0)
-        #plt.imshow(img2),plt.show()
+        if d_brisk is not None:
+            if d_sift is not None:
+                print(filename)
+                print(filename[4:filename.index('_',5)])
+                #Store the keypoints and descriptors
+                json_desc  = json.dumps({'obj':filename[4:filename.index('_',5)],'brisk':d_brisk.tolist(),'sift':d_sift.tolist()})
+                
+                with conn.cursor() as cursor:
+                    cursor.execute(sql_insert_desc,(filename[4:filename.index('_',5)],json_desc)) #We execute our SQL request
+                    conn.commit()
+        
+        
+        
 
 #End timer and show run time
 end=time.time()
 print(end - start)
-
-
-#%%
