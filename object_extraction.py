@@ -28,10 +28,12 @@ for filename in os.listdir(path):
     #Import image
     img = cv2.imread(os.path.join(path,filename))
     
+    image_name = filename[0:6]
+    
     with conn.cursor() as cursor:
         cursor.execute(sql_get_info_object,filename) #We execute our SQL request
         conn.commit()
         for row in cursor: #Extract every object and save them as images named as follow : obj_"ID_Object"_"num-img".png
             obj = img[row[7]:row[9],row[6]:row[8]]
-            cv2.imwrite('obj/obj_'+str(row[0])+'_'+row[1]+'.png',obj)
+            cv2.imwrite('obj/obj_'+str(row[0])+'_'+image_name+'.png',obj)
 
