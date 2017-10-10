@@ -15,11 +15,13 @@ import json
 from sklearn.cluster import KMeans
 from sklearn import metrics
 from scipy.spatial.distance import cdist
+from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+import pandas as pd
 
-
+#%%
 
 # Connect to the database.
 conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
@@ -41,8 +43,18 @@ with conn.cursor() as cursor:
             it+=1
         else:
            break
-       
+#%%
+#Move list of arrays to 2d df
+df_conca = pd.DataFrame(list_conca)
 
+#load pca and run
+for n in range(64):
+    pca = PCA(n_components=n)
+    pca.fit(df_conca)
+    print(n)
+    print(pca.explained_variance_ratio_.sum())
+
+#%%
     distortions = []
     
     for k in range(10,15):
