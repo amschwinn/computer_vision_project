@@ -13,8 +13,6 @@ Oussama Bouldjedri
 October 3, 2017
 """
 
-import numpy as np
-import pandas as pd
 import cv2
 import os
 import time
@@ -32,7 +30,7 @@ conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
 sql_insert_desc = "INSERT INTO `desc_obj` (`id_obj`,`desc_json`) VALUES (%s, %s)"
 
 #Set directory path for image folders
-folder="C:/Users/jerem/Documents/obj/"    
+folder="C:/Users/jerem/Documents/obj/"
 
 #Track run time
 start=time.time()
@@ -55,18 +53,19 @@ for filename in os.listdir(folder):
         k_sift = sift.detect(gray,None)
        
         #Computer keypoints and descriptors
-        k_brisk,d_brisk = brisk.compute(gray,k_brisk)
+        #k_brisk,d_brisk = brisk.compute(gray,k_brisk)
         k_sift,d_sift = brisk.compute(gray,k_sift)
-        if d_brisk is not None:
-            if d_sift is not None:
-                print(filename)
-                print(filename[4:filename.index('_',5)])
-                #Store the keypoints and descriptors
-                json_desc  = json.dumps({'obj':filename[4:filename.index('_',5)],'brisk':d_brisk.tolist(),'sift':d_sift.tolist()})
+        #if d_brisk is not None:
+        if d_sift is not None:
+            print(filename)
+            print(filename[4:filename.index('_',5)])
+            #Store the keypoints and descriptors
+            #json_desc  = json.dumps({'obj':filename[4:filename.index('_',5)],'brisk':d_brisk.tolist(),'sift':d_sift.tolist()})
+            json_desc  = json.dumps({'obj':filename[4:filename.index('_',5)],'sift':d_sift.tolist()})
                 
-                with conn.cursor() as cursor:
-                    cursor.execute(sql_insert_desc,(filename[4:filename.index('_',5)],json_desc)) #We execute our SQL request
-                    conn.commit()
+        with conn.cursor() as cursor:
+            cursor.execute(sql_insert_desc,(filename[4:filename.index('_',5)],json_desc)) #We execute our SQL request
+            conn.commit()
         
         
         
