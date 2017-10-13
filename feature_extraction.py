@@ -45,16 +45,16 @@ for filename in os.listdir(folder):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         #load feature detection algorithms
-        brisk=cv2.BRISK_create()
+        #brisk=cv2.BRISK_create()
         sift = cv2.xfeatures2d.SIFT_create()
   
         #Run feature detection algorithm
-        k_brisk = brisk.detect(gray,None)
+        #k_brisk = brisk.detect(gray,None)
         k_sift = sift.detect(gray,None)
        
         #Computer keypoints and descriptors
         #k_brisk,d_brisk = brisk.compute(gray,k_brisk)
-        k_sift,d_sift = brisk.compute(gray,k_sift)
+        k_sift,d_sift = sift.compute(gray,k_sift)
         #if d_brisk is not None:
         if d_sift is not None:
             print(filename)
