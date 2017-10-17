@@ -24,47 +24,92 @@ import pandas as pd
 #%%
 
 # Connect to the database.
-conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
+conn = pymysql.connect(db='imagesdb', user='root', passwd='', host='localhost')
+#%%
+sql_get_descriptors = "SELECT * FROM desc_obj d INNER JOIN objects o \
+    ON  d.id_obj = o.ID_object;"
 
-sql_get_descriptors = "SELECT * FROM `desc_obj`"
-
+#%%
 with conn.cursor() as cursor:
     cursor.execute(sql_get_descriptors) #We execute our SQL request
     conn.commit()
     
     it = 0
     list_conca=[]
-    
+    obj_name=[]
+    obj_id=[]
+
     for row in cursor:
         if it < 1000:
             json_desc = json.loads(row[2])
             list_conca = list_conca + json_desc['sift']
+            obj_name = obj_name + np.repeat(row[5],len(
+                    json_desc['sift'])).tolist()
+            obj_id = obj_id + [json_desc['obj']]
             print("Passage n°",it)
             it+=1
         else:
            break
+
+
+#Combine into df
+#df_conca = pd.concat([pd.Series(list_conca),pd.Series(obj_name),
+#                      pd.Series(obj_id)],axis=1)
+
 #%%
-#Move list of arrays to 2d df
-df_conca = pd.DataFrame(list_conca)
+#Transform into df for pca
+pca_conca = pd.DataFrame(list_conca)
+
+#Create table to store PCA values
+pca_results = pd.DataFrame(columns=['evr','n_comp'])
 
 #load pca and run
 for n in range(64):
     pca = PCA(n_components=n)
-    pca.fit(df_conca)
+    pca.fit(pca_conca)
+    df = pd.DataFrame.from_dict({"evr":[pca.explained_variance_ratio_.sum()],
+            "n_comp":[n]})
+    pca_results = pd.concat([pca_results,df])
     print(n)
     print(pca.explained_variance_ratio_.sum())
+    
+#%%
+#Use desired PCA for actual PCA matrix
+n_comp = 50
+pca = PCA(n_components=n_comp)
+pca.fit(pca_conca)
+pca_conca = pd.DataFrame(pca.transform(pca_conca))
+pca_conca['obj_name'] = pd.Series(obj_name)
 
 #%%
-    distortions = []
-    
-    for k in range(10,15):
+#Table to store kmean reults
+kmeans_results = pd.DataFrame(columns=['k','obj_name','distortion','run_time'])
+distortions = []
+
+#Run kmeans for each object
+for obj in pca_conca.obj_name.unique():
+    #Only cluster descriptors from this object
+    df = pca_conca[pca_conca.obj_name==obj].drop(['obj_name'],axis=1)
+  
+    #iterate through number of k
+    for k in range(10,100,10):
         #Track run time
         start=time.time()
-        kmeans = KMeans(n_clusters=k).fit(list_conca)
-        distortions.append(sum(np.min(cdist(list_conca, kmeans.cluster_centers_, 'euclidean'),axis=1))/64)
-        #End timer and show run time
+        kmeans = KMeans(n_clusters=k).fit(df)
         end=time.time()
-        print("Done for nb_cluster=",k," - In ", end - start)
+        results_df = pd.DataFrame.from_dict({"k":[k],"run_time":[(end-start)],
+            "distortion":[sum(np.min(cdist(df, kmeans.cluster_centers_, 
+            'euclidean'),axis=1))/n_comp],"obj_name":[obj]})
+        kmeans_results = pd.concat([kmeans_results,results_df])
+#%%
+
+#Total time
+print(kmeans_results.run_time.sum())
+
+#Write results files to csv's
+pca_results.to_csv('pca_results.csv')
+kmeans_results.to_csv('kmeans_results.csv')
+#%%
         
      
     # Plot the elbow
