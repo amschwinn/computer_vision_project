@@ -1,4 +1,5 @@
 # Computer Vision Project
+## Object detection and classification using bag-of-visual-words approach with K-Means and SVM and CNN
 ## Master 2 Machine Learning and Data Mining
 ### by Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
 
