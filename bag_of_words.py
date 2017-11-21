@@ -14,6 +14,9 @@ import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn import svm
+from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import normalize
+from sklearn.grid_search import GridSearchCV
 
 
 
@@ -75,5 +78,27 @@ obj_cluster_pivot = km.cluster_format(obj_clusters_total, obj_id,obj_name)
 X = obj_cluster_pivot.drop(['obj_name'],axis=1)
 y = obj_cluster_pivot['obj_name']
 
+#Normalize X
+X = normalize(X)
+
 #Create and train SVM model
-svm_clf = svm.SVC().fit(X, y) 
+#svm_clf = svm.SVC().fit(X, y) 
+
+tuned_params = [{'kernel': ['rbf','sigmoid'], 'gamma': [1e-3, 1e-4],
+                 'C': [1, 10, 100, 1000]},
+                {'kernel': ['linear'], 'C': [1, 10, 100, 1000]},
+                {'kernel': ['poly'], 'gamma': [1e-3, 1e-4],
+                 'C': [1, 10, 100, 1000], 'degree':[1,2,3,4,5,6,7]}]
+
+scores = ['precision', 'recall','accuracy']
+
+
+svm_clf = GridSearchCV(svm.SVC(), tuned_params, cv=5)
+svm_clf.fit(X, y)
+
+
+
+
+
+
+#results = cross_val_score(svm.SVC(),X,y, fit_params={'kernel':['linear','poly','rbf','sigmoid'],'degree':[range(1,10)],})
