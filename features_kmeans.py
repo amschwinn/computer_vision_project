@@ -27,7 +27,11 @@ import os
 #%%
 def load_objects_desc(n_objects):
     # Connect to the database.
-    conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
+    conn = pymysql.connect(db='images_db', user='mldm_gangster', 
+                       passwd='$aint3tienne', port=3306,
+                       host='mldm-cv-project.cnpjv4qug6jj.us-east-2.rds.amazonaws.com')
+
+    #conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
     # Query
     sql_get_descriptors = "SELECT * FROM desc_obj d INNER JOIN objects o \
         ON  d.id_obj = o.ID_object;"
