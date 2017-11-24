@@ -1,0 +1,6 @@
+name: mldm-cv-project
+channels:
+- anaconda-fusion
+- defaults
+prefix: C:\Users\schwi\Anaconda3\envs\mldm-cv-project
+
