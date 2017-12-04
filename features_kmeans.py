@@ -178,17 +178,18 @@ def kmeans_per_object(pca_conca,k):
 
     return kmeans_results, centroids
 #%%
-'''
 #Load centroid results for each object
-folder="C:/Users/schwi/Google Drive/MLDM/Computer Vision Project/results"
-centroids = {}
-for filename in os.listdir(folder):
-    if filename != 'desktop.ini':
-        #Import image
-        cent = pd.DataFrame.from_csv(filename)
-        obj = filename[16:].replace('.csv','')
-        centroids[obj] = cent
-'''
+def load_clusters(folder):
+    #folder="C:/Users/schwi/Google Drive/MLDM/Computer Vision Project/results"
+    centroids = {}
+    for filename in os.listdir(folder):
+        if filename != 'desktop.ini':
+            #Import image
+            cent = pd.DataFrame.from_csv(filename)
+            obj = filename[16:].replace('.csv','')
+            centroids[obj] = cent
+    return centroids
+
 #%%
 def combine_clusters(centroids):
     #Combine all object centroids into one df

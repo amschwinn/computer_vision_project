@@ -9,16 +9,24 @@ MLDM Master's Year 2
 Fall Semester 2017
 """
 
+#Set working directory
+import os
+os.chdir('D:/GD/MLDM/Computer Vision Project/github')
+#os.path.dirname(os.path.abspath(__file__))
+os.getcwd()
+
 import features_kmeans as km
 import pandas as pd
 import timeit
-import smtplib
+
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn import svm
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import normalize
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 
 
@@ -33,14 +41,6 @@ obj_desc_list, obj_id, obj_name = km.load_objects_desc(20000)
 end = timeit.default_timer()
 print('Load Complete')
 print(end-start)
-
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.connect("smtp.gmail.com",587)
-server.ehlo()
-server.starttls()
-server.login("schwinnteriscoming@gmail.com", "@lp4aCat")
-msg = 'Subject: Data Load Complete'
-server.sendmail("schwinnteriscoming@gmail.com", "schwinnam@gmail.com", msg)
 
 #%%
 ###############################################################################
@@ -70,7 +70,7 @@ print(end-start)
 ###############################################################################
 print('Start K-Means')
 start = timeit.default_timer()
-
+'''
 #Combine PCA results with obj name
 pca_obj_desc['obj_name'] = pd.Series(obj_name)
 
@@ -79,10 +79,15 @@ pca_obj_desc['obj_name'] = pd.Series(obj_name)
 
 #Run kmeans on object descriptors to get our visual bag of words for each obj
 obj_kmeans_results, obj_centroids = km.kmeans_per_object(pca_obj_desc,50)
+'''
+#Load bag of words from results files
+os.chdir('D:/GD/MLDM/Computer Vision Project/results')
+obj_centroids = km.load_clusters('D:/GD/MLDM/Computer Vision Project/results')
 
 #Combine all separate obj centroids into a single group of centroids for our 
 #total bag of visual words
 tot_obj_centroids = km.combine_clusters(obj_centroids)
+tot_obj_centroids = tot_obj_centroids.iloc[:,50:]
 
 #Create k-means model with the all object centroids 
 obj_kmeans_total = KMeans(init=tot_obj_centroids,
@@ -112,6 +117,10 @@ y = obj_cluster_pivot['obj_name']
 #Normalize X
 X = normalize(X)
 
+#Train test split
+X_train, X_test, y_train, y_test = train_test_split(X,y)
+
+'''
 #Use grid search to find correct hyperparameter
 #Specify params to iterate over
 tuned_params = [{'kernel': ['rbf','sigmoid'], 'gamma': [1e-3, 1e-4],
@@ -132,21 +141,16 @@ svm_grid_results.to_csv('svm_gridsearch_results.csv')
 end = timeit.default_timer()
 print('SVM Complete')
 print(end-start)
+'''
 
 #Create and train SVM model
-#svm_clf = svm.SVC().fit(X, y) 
+svm_clf = svm.SVC(kernel='linear').fit(X_train, y_train) 
+y_pred = svm_clf.predict(X_test)
+#%%
 
-#results = cross_val_score(svm.SVC(),X,y, fit_params={'kernel':['linear','poly','rbf','sigmoid'],'degree':[range(1,10)],})
+svm_acc = accuracy_score(y_test, y_pred)
 
 #%%
 ###############################################################################
 # Other
 ###############################################################################
-#Send email notification when test is complete
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.connect("smtp.gmail.com",587)
-server.ehlo()
-server.starttls()
-server.login("schwinnteriscoming@gmail.com", "@lp4aCat")
-msg = 'Subject: SVM Test Complete'
-server.sendmail("schwinnteriscoming@gmail.com", "schwinnam@gmail.com", msg)
