@@ -25,15 +25,19 @@ descriptors = []
 #images = []
 
 # Connect to the database.
-conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
+conn = pymysql.connect(db='images_db', user='mldm_gangster', passwd='$aint3tienne', host='mldm-cv-project.cnpjv4qug6jj.us-east-2.rds.amazonaws.com')
+#conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
 
-sql_insert_desc = "INSERT INTO `desc_obj` (`id_obj`,`desc_json`) VALUES (%s, %s)"
+sql_insert_desc = "INSERT INTO `desc_img` (`num_img`,`desc_json`) VALUES (%s, %s)"
+#sql_insert_desc = "INSERT INTO `desc_obj` (`id_obj`,`desc_json`) VALUES (%s, %s)"
 
 #Set directory path for image folders
-folder="C:/Users/jerem/Documents/obj/"
+folder="C:/Users/jerem/Desktop/M2/CV/VOCdevkit/VOC2007/JPEGImages/"
 
 #Track run time
 start=time.time()
+
+cpt = 0
 
 #Iterate through images extracting key poins and descriptors
 for filename in os.listdir(folder):
@@ -57,15 +61,18 @@ for filename in os.listdir(folder):
         k_sift,d_sift = sift.compute(gray,k_sift)
         #if d_brisk is not None:
         if d_sift is not None:
-            print(filename)
-            print(filename[4:filename.index('_',5)])
+            #print(filename)
+            #print(filename[0:filename.index('.',5)])
             #Store the keypoints and descriptors
             #json_desc  = json.dumps({'obj':filename[4:filename.index('_',5)],'brisk':d_brisk.tolist(),'sift':d_sift.tolist()})
-            json_desc  = json.dumps({'obj':filename[4:filename.index('_',5)],'sift':d_sift.tolist()})
+            json_desc  = json.dumps({'img':filename,'sift':d_sift.tolist()})
                 
         with conn.cursor() as cursor:
-            cursor.execute(sql_insert_desc,(filename[4:filename.index('_',5)],json_desc)) #We execute our SQL request
+            cursor.execute(sql_insert_desc,(filename[0:filename.index('.',5)],json_desc)) #We execute our SQL request
             conn.commit()
+        cpt += 1
+        if cpt%100 == 0:
+            print((cpt*100)/5011)
         
         
         
