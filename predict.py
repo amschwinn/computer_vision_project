@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-
 Created on Sat Nov 25 21:12:27 2017
 
 @author: dell1
@@ -15,7 +14,8 @@ import requests
 from io import BytesIO
 import matplotlib.pyplot as plt
 import cv2
-
+import pandas as pd
+import os 
 from keras.preprocessing import image
 from keras.models import load_model
 from keras.applications.inception_v3 import preprocess_input
@@ -23,7 +23,7 @@ from keras.applications.inception_v3 import preprocess_input
 
 target_size = (229, 229) #fixed size for InceptionV3 architecture
 Classes=["areoplane","bycicle","bird","boat","bottle","bus","car","cat","chair",
-         "cow","digningtable","dog","horse","motorbike","person","pottedplant","sheep"
+         "cow","digningtable","dog","horse","motorbike","person","pottedplant","sheep",
          "sofa","train","TVmonitor"]
 
 def predict(model, img, target_size):
@@ -80,16 +80,33 @@ if __name__=="__main__":
     img = Image.open(args.image)
     preds = predict(model, img, target_size)
     print(preds)
+    print()
+    #objs = os.listdir('/home/dell1/Desktop/cnn5/data/training')
+    objs=Classes
+    #print("objects are",objs)
+    #Percent of total prediction by each object type
+    percent_pred = []
+    for i in preds:
+      percent_pred = percent_pred + [(i/np.sum(preds))]
+    print(percent_pred) 
+    print()
+    print()
+    #combine percents with labels
+    #percent_pred = pd.DataFrame(percent_pred[0], index=objs)
+    result=np.column_stack((percent_pred,objs))
+    print(result)
+    print()
+    print(result[np.lexsort(np.fliplr(result).T)])
     #plot_preds(img, preds)
-    ind=np.argmax(preds)
-    print("there is a probability of ",preds[ind]*100)
-    print(" this object is from the class",Classes[ind])
+    #ind=np.argmax(preds)
+    #print("there is a probability of ",preds[ind]*100)
+    #print(" this object is from the class",Classes[ind])
     
     
-    orig = cv2.imread(args.image)
+    #orig = cv2.imread(args.image)
    #(imagenetID, label, prob) =
-    label=Classes[ind]
-    prob=preds[ind]*100
+    #label=Classes[ind]
+    #prob=preds[ind]*100
     #cv2.putText(orig, "Label: {}, {:.2f}%".format(label, prob),
 	#(10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
     #cv2.imshow("Classification", orig)

@@ -20,9 +20,13 @@ from keras.models import load_model
 from keras.applications.inception_v3 import preprocess_input
 import os  
 
+def pause():
+    programPause = input("Press the <ENTER> key to continue...")
+
+
 target_size = (229, 229) #fixed size for InceptionV3 architecture
 Classes=["areoplane","bycicle","bird","boat","bottle","bus","car","cat","chair",
-         "cow","digningtable","dog","horse","motorbike","person","pottedplant","sheep"
+         "cow","digningtable","dog","horse","motorbike","person","pottedplant","sheep",
          "sofa","train","TVmonitor"]
 
 def predict(model, img, target_size):
@@ -81,19 +85,36 @@ if __name__=="__main__":
      for file in files:  
         #if file == '*.shp':  
       print("file is ",file)
-      pat=args.image+'/'+file
-      print("path is ",pat)
+      #path=args.image+'/'+file
+      path=subdirs+'/'+file
+      print("path is ",path)
       #img = Image.open(args.image)
-      img = Image.open(pat)
-      print("foo")
+      img = Image.open(path)
+      #print("foo")
       preds = predict(model, img, target_size)
       print(preds)
+      print()
+      objs=Classes
+    #print("objects are",objs)
+    #Percent of total prediction by each object type
+      percent_pred = []
+      for i in preds:
+       percent_pred = percent_pred + [(i/np.sum(preds))]
+      print(percent_pred) 
+      print()
+      #print()
+    #combine percents with labels
+    #percent_pred = pd.DataFrame(percent_pred[0], index=objs)
+      result=np.column_stack((percent_pred,objs))
+      print(result)
+      #pause()
+      
       #plot_preds(img, preds)
-      ind=np.argmax(preds)
+      #ind=np.argmax(preds)
       
       #print("there is a probability of ",preds[ind]*100)
       #print(" this object is from the class",Classes[ind])
-      print()
+      #print()
     '''
     orig = cv2.imread(args.image)
    #(imagenetID, label, prob) =
