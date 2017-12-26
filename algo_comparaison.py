@@ -13,7 +13,7 @@ import numpy as np
 import os
 from PIL import Image
 
-
+from sklearn.metrics import average_precision_score
 import os
 import re
 from sklearn.multiclass import OneVsRestClassifier
@@ -99,24 +99,63 @@ clf = LinearSVC(C=1.0, loss='squared_hinge', penalty='l2',multi_class='ovr')
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 b=accuracy_score(y_test, y_pred)
-print(b) 
+print(b)
  
-t=OneVsRestClassifier(LinearSVC(C=100.)).fit(X_train, y_train)
-y_preds=t.predict(X_test)
-b2=accuracy_score(y_test, y_preds)
+#%%
+
+#from sklearn.metrics import average_precision_score
+b2=average_precision_score(y_test, y_pred) 
+print(b2)
+
+clf=OneVsRestClassifier(LinearSVC(C=100.)).fit(X_train, y_train)
+y_preds=clf.predict(X_test)
+b3=accuracy_score(y_test, y_preds)
 print("the accuracy score is ",b2) 
-
-
-
+b4=average_precision_score(y_test, y_pred) 
+print(b4)
+#%%
 
 from sklearn.model_selection import cross_val_score
 from sklearn import model_selection
 seed = 7
 
-kfold = model_selection.KFold(n_splits=10, random_state=seed)
+kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
 clf = OneVsRestClassifier(LinearSVC(C=100.)).fit(X,Y)
 scores = cross_val_score(clf, X, Y,cv=kfold)
-scores.mean()
+b5=scores.mean()
+b6=average_precision_score(y_test, y_pred) 
+print(b6)
+#%%
+'''
+from skmultilearn.adapt import MLkNN
+
+classifier = MLkNN(k=1)
+
+# train
+classifier.fit(X_train, y_train)
+
+# predict
+predictions = classifier.predict(X_test)
+
+accuracy_score(y_test,predictions)
+'''
+
+#%%
+
+
+
+
+from skmultilearn.adapt import MLkNN
+clf=MLkNN(k=1)
+#
+kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
+scores = cross_val_score(clf, X, Y,cv=kfold)
+b8=scores.mean()
+print("kfold for MLKNN is ",b8)
+clf.fit(X_train,y_train)
+y_preds=clf.predict(X_test)
+b7=accuracy_score(y_test,y_preds)
+print("accuracy in MLKNN is ",b7)
 
 #%%
 ############################################################################
@@ -127,39 +166,68 @@ from sklearn.model_selection import cross_val_score
 from sklearn import model_selection
 seed = 7
 
-kfold = model_selection.KFold(n_splits=10, random_state=seed)
+kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
 clf = DecisionTreeClassifier(max_depth=None, min_samples_split=2,random_state=0)
+clf.fit(X_train, y_train)
+y_preds=clf.predict(X_test)
+b6=accuracy_score(y_test, y_preds)
+print("the accuracy score is ",b6) 
+
 scores = cross_val_score(clf, X, Y,cv=kfold)
-scores.mean()
+b8=scores.mean()
 
-
+b7=average_precision_score(y_test, y_pred) 
+print(b7)
 
 ########################################################################
 #%%
 #import pandas
 from sklearn import model_selection
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn import model_selection
 
 seed = 7
 num_trees = 100
-max_features = 100
-kfold = model_selection.KFold(n_splits=10, random_state=seed)
+max_features = 200
+kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
 model = ExtraTreesClassifier(n_estimators=num_trees, max_features=max_features)
-results = model_selection.cross_val_score(model, X, Y,cv=kfold)
-print(results.mean())
+model.fit(X_train, y_train)
+y_preds=model.predict(X_test)
+b9=accuracy_score(y_test, y_preds)
+print("the accuracy score is ",b9) 
 
+
+results = model_selection.cross_val_score(model, X, Y,cv=kfold)
+b11=results.mean()
+print(b11)
+
+b10=average_precision_score(y_test, y_pred) 
+print(b10)
 
 #%%
 from sklearn.ensemble import AdaBoostClassifier
 
 seed = 7
 num_trees = 100
-kfold = model_selection.KFold(n_splits=10, random_state=seed)
+kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
 model = AdaBoostClassifier(n_estimators=num_trees, random_state=seed)
+model.fit(X_train, y_train)
+y_preds=model.predict(X_test)
+b12=accuracy_score(y_test, y_preds)
+print("the accuracy score is ",b12) 
+#b13=average_precision_score(y_test, y_pred) 
+#print(b13)
 results = model_selection.cross_val_score(model, X, Y,cv=kfold)
-print(results.mean())
-
+b14=results.mean()
+print(b14)
+b13=average_precision_score(y_test, y_pred) 
+print(b13)
 ######################################
 #%%
+'''
 from sklearn.neighbors import KNeighborsClassifier
 neigh = KNeighborsClassifier(n_neighbors=3)
 neigh.fit(X, Y)
@@ -220,4 +288,4 @@ print("Labels: {0}\n".format(",".join(labels)))
 print(confusion_matrix(y_test, y_predict, labels=labels))
 #print("\nClassification report:")
 #print(classification_report(y_test, y_predict)) 
- 
+'''
