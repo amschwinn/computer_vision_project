@@ -97,22 +97,23 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, Y, test_
 
 clf = LinearSVC(C=1.0, loss='squared_hinge', penalty='l2',multi_class='ovr')
 clf.fit(X_train, y_train)
-y_pred = clf.predict(X_test)
-b=accuracy_score(y_test, y_pred)
-print(b)
+y_preds = clf.predict(X_test)
+b=accuracy_score(y_test, y_preds)
+print("the accuracy for normal SVM is ",b)
  
-#%%
 
 #from sklearn.metrics import average_precision_score
-b2=average_precision_score(y_test, y_pred) 
-print(b2)
+b2=average_precision_score(y_test, y_preds) 
+print("the average precision for noemal SVM is ",b2)
 
-clf=OneVsRestClassifier(LinearSVC(C=100.)).fit(X_train, y_train)
-y_preds=clf.predict(X_test)
-b3=accuracy_score(y_test, y_preds)
-print("the accuracy score is ",b2) 
-b4=average_precision_score(y_test, y_pred) 
-print(b4)
+#%%
+
+clf2=OneVsRestClassifier(LinearSVC(C=100.)).fit(X_train, y_train)
+y_preds2=clf2.predict(X_test)
+b3=accuracy_score(y_test, y_preds2)
+print("the accuracy score for one class SVM is   ",b3) 
+b4=average_precision_score(y_test, y_preds2) 
+print("the average precision for  svm once class is ",b4)
 #%%
 
 from sklearn.model_selection import cross_val_score
@@ -120,25 +121,14 @@ from sklearn import model_selection
 seed = 7
 
 kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
-clf = OneVsRestClassifier(LinearSVC(C=100.)).fit(X,Y)
-scores = cross_val_score(clf, X, Y,cv=kfold)
+clf3 = OneVsRestClassifier(LinearSVC(C=100.)).fit(X,Y)
+scores = cross_val_score(clf3, X, Y,cv=kfold)
 b5=scores.mean()
-b6=average_precision_score(y_test, y_pred) 
-print(b6)
+print("the Kfold cross validation score for thr one class SVM is ",b5)
+#b6=average_precision_score(y_test, y_preds2) 
+#print(b6)
 #%%
-'''
-from skmultilearn.adapt import MLkNN
 
-classifier = MLkNN(k=1)
-
-# train
-classifier.fit(X_train, y_train)
-
-# predict
-predictions = classifier.predict(X_test)
-
-accuracy_score(y_test,predictions)
-'''
 
 #%%
 
@@ -146,15 +136,15 @@ accuracy_score(y_test,predictions)
 
 
 from skmultilearn.adapt import MLkNN
-clf=MLkNN(k=1)
+clf4=MLkNN(k=1)
 #
-kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
-scores = cross_val_score(clf, X, Y,cv=kfold)
-b8=scores.mean()
+kfold2 = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
+scores2 = cross_val_score(clf4, X, Y,cv=kfold2)
+b8=scores2.mean()
 print("kfold for MLKNN is ",b8)
-clf.fit(X_train,y_train)
-y_preds=clf.predict(X_test)
-b7=accuracy_score(y_test,y_preds)
+clf4.fit(X_train,y_train)
+y_preds3=clf4.predict(X_test)
+b7=accuracy_score(y_test,y_preds3)
 print("accuracy in MLKNN is ",b7)
 
 #%%
@@ -166,18 +156,18 @@ from sklearn.model_selection import cross_val_score
 from sklearn import model_selection
 seed = 7
 
-kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
-clf = DecisionTreeClassifier(max_depth=None, min_samples_split=2,random_state=0)
-clf.fit(X_train, y_train)
-y_preds=clf.predict(X_test)
-b6=accuracy_score(y_test, y_preds)
-print("the accuracy score is ",b6) 
+kfold3 = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
+clf5 = DecisionTreeClassifier(max_depth=None, min_samples_split=2,random_state=0)
+clf5.fit(X_train, y_train)
+y_preds4=clf5.predict(X_test)
+b9=accuracy_score(y_test, y_preds4)
+print("the accuracy score for desicion tree  is ",b9) 
 
-scores = cross_val_score(clf, X, Y,cv=kfold)
-b8=scores.mean()
-
-b7=average_precision_score(y_test, y_pred) 
-print(b7)
+scores3 = cross_val_score(clf5, X, Y,cv=kfold3)
+b10=scores3.mean()
+print("the kfold score for desicion tree is ",b10)
+b11=average_precision_score(y_test, y_preds4) 
+print("the average precision score for desicion tree  is ", b11)
 
 ########################################################################
 #%%
@@ -192,39 +182,39 @@ from sklearn import model_selection
 seed = 7
 num_trees = 100
 max_features = 200
-kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
+kfold4 = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
 model = ExtraTreesClassifier(n_estimators=num_trees, max_features=max_features)
 model.fit(X_train, y_train)
-y_preds=model.predict(X_test)
-b9=accuracy_score(y_test, y_preds)
-print("the accuracy score is ",b9) 
+y_preds5=model.predict(X_test)
+b12=accuracy_score(y_test, y_preds5)
+print("the accuracy score for extra tree is ",b12) 
 
 
-results = model_selection.cross_val_score(model, X, Y,cv=kfold)
-b11=results.mean()
-print(b11)
+results = model_selection.cross_val_score(model, X, Y,cv=kfold4)
+b13=results.mean()
+print("the k fold cross val score for extra tress is ", b13)
 
-b10=average_precision_score(y_test, y_pred) 
-print(b10)
+b14=average_precision_score(y_test, y_preds5) 
+print("the average precision score for extra tress is ",b14)
 
 #%%
 from sklearn.ensemble import AdaBoostClassifier
 
 seed = 7
 num_trees = 100
-kfold = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
-model = AdaBoostClassifier(n_estimators=num_trees, random_state=seed)
-model.fit(X_train, y_train)
-y_preds=model.predict(X_test)
-b12=accuracy_score(y_test, y_preds)
-print("the accuracy score is ",b12) 
+kfold5 = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
+model2 = AdaBoostClassifier(n_estimators=num_trees, random_state=seed)
+model2.fit(X_train, y_train)
+y_preds6=model2.predict(X_test)
+b12=accuracy_score(y_test, y_preds6)
+print("the accuracy score for Ada Boost is ",b12) 
 #b13=average_precision_score(y_test, y_pred) 
 #print(b13)
-results = model_selection.cross_val_score(model, X, Y,cv=kfold)
+results = model_selection.cross_val_score(model2, X, Y,cv=kfold5)
 b14=results.mean()
-print(b14)
-b13=average_precision_score(y_test, y_pred) 
-print(b13)
+print("the kfold cross validation score for ada boost is ",b14)
+b13=average_precision_score(y_test, y_preds6) 
+print("the verage presicion score for ada boost is ",b13)
 ######################################
 #%%
 '''
