@@ -5,7 +5,7 @@ Created on Sat Nov 25 21:11:57 2017
 
 @author: dell1
 """
-
+import keras
 import os
 import sys
 import glob
@@ -42,8 +42,8 @@ def setup_to_transfer_learn(model, base_model):
   """Freeze all layers and compile the model"""
   for layer in base_model.layers:
     layer.trainable = False
-  model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
-
+  #model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+  model.compile(loss='binary_crossentropy',optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
 
 def add_new_last_layer(base_model, nb_classes):
   """Add last layer to the convnet
@@ -71,8 +71,8 @@ def setup_to_finetune(model):
      layer.trainable = False
   for layer in model.layers[NB_IV3_LAYERS_TO_FREEZE:]:
      layer.trainable = True
-  model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
-
+  #model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
+  model.compile(loss='binary_crossentropy',optimizer=keras.optimizers.Adam(),metrics=['accuracy']) 
 
 def train(args):
   """Use transfer learning and fine-tuning to train a network on a new dataset"""
@@ -183,4 +183,3 @@ if __name__=="__main__":
     sys.exit(1)
 
   train(args)
-
