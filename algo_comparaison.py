@@ -135,17 +135,7 @@ print("the Kfold cross validation score for thr one class SVM is ",b5)
 
 
 
-from skmultilearn.adapt import MLkNN
-clf4=MLkNN(k=1)
-#
-kfold2 = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
-scores2 = cross_val_score(clf4, X, Y,cv=kfold2)
-b8=scores2.mean()
-print("kfold for MLKNN is ",b8)
-clf4.fit(X_train,y_train)
-y_preds3=clf4.predict(X_test)
-b7=accuracy_score(y_test,y_preds3)
-print("accuracy in MLKNN is ",b7)
+
 
 #%%
 ############################################################################
@@ -216,6 +206,25 @@ print("the kfold cross validation score for ada boost is ",b14)
 #b13=average_precision_score(y_test, y_preds6) 
 #print("the verage presicion score for ada boost is ",b13)
 ######################################
+#%%
+from skmultilearn.adapt import MLkNN
+clf4=MLkNN(k=1)
+#
+kfold2 = model_selection.KFold(n_splits=10,shuffle=True, random_state=seed)
+scores2 = cross_val_score(clf4, X, Y,cv=kfold2)
+b8=scores2.mean()
+print("kfold for MLKNN is ",b8)
+clf4.fit(X_train,y_train)
+y_preds3=clf4.predict(X_test)
+b7=accuracy_score(y_test,y_preds3)
+print("accuracy in MLKNN is ",b7)
+
+
+
+
+
+
+
 #%%
 '''
 from sklearn.neighbors import KNeighborsClassifier
