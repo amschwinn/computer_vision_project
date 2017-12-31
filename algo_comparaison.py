@@ -103,8 +103,8 @@ print("the accuracy for normal SVM is ",b)
  
 
 #from sklearn.metrics import average_precision_score
-b2=average_precision_score(y_test, y_preds) 
-print("the average precision for noemal SVM is ",b2)
+#b2=average_precision_score(y_test, y_preds) 
+#print("the average precision for noemal SVM is ",b2)
 
 #%%
 
@@ -112,8 +112,8 @@ clf2=OneVsRestClassifier(LinearSVC(C=100.)).fit(X_train, y_train)
 y_preds2=clf2.predict(X_test)
 b3=accuracy_score(y_test, y_preds2)
 print("the accuracy score for one class SVM is   ",b3) 
-b4=average_precision_score(y_test, y_preds2) 
-print("the average precision for  svm once class is ",b4)
+#b4=average_precision_score(y_test, y_preds2) 
+#print("the average precision for  svm once class is ",b4)
 #%%
 
 from sklearn.model_selection import cross_val_score
@@ -166,8 +166,8 @@ print("the accuracy score for desicion tree  is ",b9)
 scores3 = cross_val_score(clf5, X, Y,cv=kfold3)
 b10=scores3.mean()
 print("the kfold score for desicion tree is ",b10)
-b11=average_precision_score(y_test, y_preds4) 
-print("the average precision score for desicion tree  is ", b11)
+#b11=average_precision_score(y_test, y_preds4) 
+#print("the average precision score for desicion tree  is ", b11)
 
 ########################################################################
 #%%
@@ -194,8 +194,8 @@ results = model_selection.cross_val_score(model, X, Y,cv=kfold4)
 b13=results.mean()
 print("the k fold cross val score for extra tress is ", b13)
 
-b14=average_precision_score(y_test, y_preds5) 
-print("the average precision score for extra tress is ",b14)
+#b14=average_precision_score(y_test, y_preds5) 
+#print("the average precision score for extra tress is ",b14)
 
 #%%
 from sklearn.ensemble import AdaBoostClassifier
@@ -213,8 +213,8 @@ print("the accuracy score for Ada Boost is ",b12)
 results = model_selection.cross_val_score(model2, X, Y,cv=kfold5)
 b14=results.mean()
 print("the kfold cross validation score for ada boost is ",b14)
-b13=average_precision_score(y_test, y_preds6) 
-print("the verage presicion score for ada boost is ",b13)
+#b13=average_precision_score(y_test, y_preds6) 
+#print("the verage presicion score for ada boost is ",b13)
 ######################################
 #%%
 '''
