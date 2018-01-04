@@ -114,7 +114,7 @@ if __name__=="__main__":
       
       teststr=""
       #teststr2=str(teststr)
-      for i in range (1 ,20):  
+      for i in range (0 ,20):  
        if Classes[i] in test:
            teststr+=Classes2[i]
       print("the hot ecnoding is ",teststr)     
@@ -161,16 +161,16 @@ if __name__=="__main__":
       result=np.column_stack((percent_pred,objs))
       print(result)
       print()
-      preds[preds>=0.2] = 1
-      preds[preds<0.2] = 0
+      preds[preds>=0.25] = 1
+      preds[preds<0.25] = 0
       res=[]
-      for i in range (1,20):
+      for i in range (0,20):
         if (preds[i]==1):
          res.append(objs[i])
       print(res)
       teststrpred=""
       #teststrpred2=str(teststrpred)
-      for i in range (1 ,20):  
+      for i in range (0 ,20):  
        if Classes[i] in res:
            teststrpred+=Classes2[i]
       print("the hot ecnoding is ",teststrpred)   
