@@ -1,0 +1,120 @@
+Sensitivity Score :  0.841449955163
+Geometric mean Score :  0.826627962907
+Accuracy average SVM_ aeroplane  is  0.662205217989
+Accuracy SVM_ aeroplane  is  0.987365761213
+[[1524    2]
+ [  18   39]]
+Sensitivity Score :  0.530496814669
+Geometric mean Score :  0.270379644651
+Accuracy average SVM_ bicycle  is  0.0439312759801
+Accuracy SVM_ bicycle  is  0.955780164245
+[[1509   20]
+ [  50    4]]
+Sensitivity Score :  0.88640555232
+Geometric mean Score :  0.879924503918
+Accuracy average SVM_ bird  is  0.665171290668
+Accuracy SVM_ bird  is  0.984207201516
+[[1505   10]
+ [  15   53]]
+Sensitivity Score :  0.796142334553
+Geometric mean Score :  0.774768382094
+Accuracy average SVM_ boat  is  0.235917039161
+Accuracy SVM_ boat  is  0.972204674668
+[[1520   32]
+ [  12   19]]
+Sensitivity Score :  0.523053593773
+Geometric mean Score :  0.251651456161
+Accuracy average SVM_ bottle  is  0.0447038086117
+Accuracy SVM_ bottle  is  0.945672773215
+[[1493   28]
+ [  58    4]]
+Sensitivity Score :  0.578773072747
+Geometric mean Score :  0.406382307445
+Accuracy average SVM_ bus  is  0.0858745381803
+Accuracy SVM_ bus  is  0.965887555275
+[[1521   14]
+ [  40    8]]
+Sensitivity Score :  0.70309454191
+Geometric mean Score :  0.666849390164
+Accuracy average SVM_ car  is  0.245766754529
+Accuracy SVM_ car  is  0.883133291219
+[[1325  106]
+ [  79   73]]
+Sensitivity Score :  0.740526492287
+Geometric mean Score :  0.697917761544
+Accuracy average SVM_ cat  is  0.348279764284
+Accuracy SVM_ cat  is  0.965887555275
+[[1494   18]
+ [  36   35]]
+Sensitivity Score :  0.488273434136
+Geometric mean Score :  0.163075822491
+Accuracy average SVM_ chair  is  0.0667627524466
+Accuracy SVM_ chair  is  0.886291850916
+[[1400   76]
+ [ 104    3]]
+Sensitivity Score :  0.621151379089
+Geometric mean Score :  0.498071972254
+Accuracy average SVM_ cow  is  0.0947041482417
+Accuracy SVM_ cow  is  0.981048641819
+[[1547   12]
+ [  18    6]]
+Sensitivity Score :  0.522234485296
+Geometric mean Score :  0.289698826119
+Accuracy average SVM_ diningtable  is  0.0390264362159
+Accuracy SVM_ diningtable  is  0.925457991156
+[[1460   66]
+ [  52    5]]
+Sensitivity Score :  0.649957406934
+Geometric mean Score :  0.560277516331
+Accuracy average SVM_ dog  is  0.176566813372
+Accuracy SVM_ dog  is  0.946936197094
+[[1474   31]
+ [  53   25]]
+Sensitivity Score :  0.691516828506
+Geometric mean Score :  0.636780031429
+Accuracy average SVM_ horse  is  0.155822469663
+Accuracy SVM_ horse  is  0.939355653822
+[[1460   59]
+ [  37   27]]
+Sensitivity Score :  0.625249169435
+Geometric mean Score :  0.520669132478
+Accuracy average SVM_ motorbike  is  0.0793837345719
+Accuracy SVM_ motorbike  is  0.952621604548
+[[1496   44]
+ [  31   12]]
+Sensitivity Score :  0.509291100866
+Geometric mean Score :  0.50882998326
+Accuracy average SVM_ person  is  0.258846879697
+Accuracy SVM_ person  is  0.51989892609
+[[626 553]
+ [207 197]]
+Sensitivity Score :  0.527990851162
+Geometric mean Score :  0.272505786228
+Accuracy average SVM_ pottedplant  is  0.0493569391232
+Accuracy SVM_ pottedplant  is  0.942514213519
+[[1487   30]
+ [  61    5]]
+Sensitivity Score :  0.761879122358
+Geometric mean Score :  0.72454793719
+Accuracy average SVM_ sheep  is  0.381625257078
+Accuracy SVM_ sheep  is  0.991787744788
+[[1560    4]
+ [   9   10]]
+Sensitivity Score :  0.529824625148
+Geometric mean Score :  0.347214773556
+Accuracy average SVM_ sofa  is  0.0376501752498
+Accuracy SVM_ sofa  is  0.902716361339
+[[1422  107]
+ [  47    7]]
+Sensitivity Score :  0.805662092247
+Geometric mean Score :  0.784263740759
+Accuracy average SVM_ train  is  0.4706088158
+Accuracy SVM_ train  is  0.974731522426
+[[1502   15]
+ [  25   41]]
+Sensitivity Score :  0.565455059356
+Geometric mean Score :  0.389111262881
+Accuracy average SVM_ tvmonitor  is  0.0613137051184
+Accuracy SVM_ tvmonitor  is  0.945672773215
+[[1488   37]
+ [  49    9]]
