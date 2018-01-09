@@ -31,11 +31,10 @@ from keras.preprocessing import image
 from keras.applications.inception_v3 import preprocess_input
 
 
-
 import numpy as np
 with tf.device('/gpu:1'):
     model = VGG16(weights='imagenet', include_top=False)
-    nb_features = 51200
+    nb_features = 25088
     f = np.empty(nb_features) ## change to the nbr of all images 
     labels = []
     #labels=np.empty([20])
@@ -65,11 +64,11 @@ with tf.device('/gpu:1'):
 
           labels.append(currentdir)
 #%%    
-f.shape = (int(len(f)/nb_features),nb_features)
-f = f[1:,:]
-X=f
-Y=labels   
-
+    f.shape = (int(len(f)/nb_features),nb_features)
+    f = f[1:,:]
+    X=f
+    Y=labels   
+#%%   
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, Y, test_size=0.2, random_state=42)
 
 ###############################################################SVM part###
