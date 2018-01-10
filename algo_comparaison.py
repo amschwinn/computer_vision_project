@@ -14,93 +14,123 @@ import os
 from PIL import Image
 
 from sklearn.metrics import average_precision_score
-import os
-import re
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.svm import LinearSVC
+from sklearn.svm import LinearSVC, SVC
 import tensorflow as tf
 import tensorflow.python.platform
 from tensorflow.python.platform import gfile
 import numpy as np
-import pandas as pd
-import sklearn
 from sklearn import cross_validation
 from sklearn.metrics import accuracy_score, confusion_matrix
-from sklearn.svm import SVC, LinearSVC
-import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 #%matplotlib inline
-import pickle
-
-
 print("##############################################################")
 from keras.applications.inception_v3 import InceptionV3
+from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
 from keras.applications.inception_v3 import preprocess_input
+
+
 import numpy as np
+with tf.device('/gpu:1'):
+    model = VGG16(weights='imagenet', include_top=False)
+    nb_features = 25088
+    f = np.empty(nb_features) ## change to the nbr of all images 
+    labels = []
+    #labels=np.empty([20])
+    #labels= np.array([])
+    img_path ='C:/Users/jerem/Documents/data/'
+    #img_path = 'D:/GD/MLDM/Computer_Vision_Project/cnn5/data/Objects/training'
+    #img_path = 'D:/GD/MLDM/Computer_Vision_Project/cnn5/data/training'
+    
+    for subdirs, dirs, files in os.walk(img_path):
+         print("pass")
+         path=[]
+         print("the current sub dir is ",subdirs)
+         print("the current dir is ",dirs)
+         for file in files:  
+          path=subdirs+'/'+file
+          img = image.load_img(path, target_size=(224, 224))
+          x = image.img_to_array(img)
+          x = np.expand_dims(x, axis=0)
+          x = preprocess_input(x)
+    
+          features3 = model.predict(x)
 
-model = InceptionV3(weights='imagenet', include_top=False)
-nb_features = 51200
-f = np.empty(nb_features) ## change to the nbr of all images 
-labels = []
-#labels=np.empty([20])
-#labels= np.array([])
-img_path ='/home/dell1/Desktop/cnn5/full_image_training'
-#img_path = 'D:/GD/MLDM/Computer_Vision_Project/cnn5/data/Objects/training'
-#img_path = 'D:/GD/MLDM/Computer_Vision_Project/cnn5/data/training'
+          flat3=features3.flatten()
 
-for subdirs, dirs, files in os.walk(img_path):
-     print("pass")
-     path=[]
-     print("the current sub dir is ",subdirs)
-     print("the current dir is ",dirs)
-     for file in files:  
-        #if file == '*.shp':  
-      #print("file is ",file)
-      #path=img_path+'/'+subdirs+'/'+file
-      path=subdirs+'/'+file
-      #print("path is ",path)
-      #img = Image.open(args.image)
-      img = image.load_img(path, target_size=(224, 224))
-      x = image.img_to_array(img)
-      x = np.expand_dims(x, axis=0)
-      x = preprocess_input(x)
+          f = np.append(f,flat3)
+          currentdir=os.path.basename(os.path.normpath(subdirs))
 
-      features3 = model.predict(x)
-      #print(features3.shape)
-
-      flat3=features3.flatten()
-      #flat3.shape = (0,nb_features)
-      #f.append(flat3)
-      f = np.append(f,flat3)
-      currentdir=os.path.basename(os.path.normpath(subdirs))
-      #np.append(labels,currentdir)
-      #labels.append(currentdir)
-      #currentdir=
-      labels.append(currentdir)
-
-#%%      
-print("done") 
-f.shape = (int(len(f)/nb_features),nb_features)
-f = f[1:,:]    
-X=f
-Y=labels   
-
-
-###############################################################SVM part###
-#%%
-
+          labels.append(currentdir)
+#%%    
+    f.shape = (int(len(f)/nb_features),nb_features)
+    f = f[1:,:]
+    X=f
+    Y=labels   
+#%%   
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, Y, test_size=0.2, random_state=42)
 
+###############################################################SVM part###
+corresp = {}
+corresp[0] = "aeroplane"
+corresp[1] = "bicycle"
+corresp[2] = "bird"
+corresp[3] = "boat"
+corresp[4] = "bottle"
+corresp[5] = "bus"
+corresp[6] = "car"
+corresp[7] = "cat"
+corresp[8] = "chair"
+corresp[9] = "cow"
+corresp[10] = "diningtable"
+corresp[11] = "dog"
+corresp[12] = "horse"
+corresp[13] = "motorbike"
+corresp[14] = "person"
+corresp[15] = "pottedplant"
+corresp[16] = "sheep"
+corresp[17] = "sofa"
+corresp[18] = "train"
+corresp[19] = "tvmonitor"
+
+from sklearn.externals import joblib
+from imblearn.metrics import sensitivity_score,geometric_mean_score
+for k in range(0,20):
+    y_train_tmp = np.zeros(len(y_train))
+    for i in range(0,len(y_train)):
+        if y_train[i] == corresp[k]:
+            y_train_tmp[i] = 1
+        else:
+            y_train_tmp[i] =0
+
+    svm_obj = LinearSVC(C=1.0, loss='squared_hinge', penalty='l2',multi_class='ovr')    
+    svm_obj.fit(X_train, y_train_tmp)
+    
+    name_file_svm = "svm_vgg_"+corresp[k]+".pkl"
+
+    joblib.dump(svm_obj, name_file_svm) 
+    
+    y_test_tmp = np.zeros(len(y_test))
+    
+    for j in range(0,len(y_test)):
+        if y_test[j] == corresp[k]:
+            y_test_tmp[j] = 1
+        else:
+            y_test_tmp[j] =0
+    y_preds = svm_obj.predict(X_test)
+    
+    acc=accuracy_score(y_test_tmp, y_preds)
+    acc_avg= average_precision_score(y_test_tmp, y_preds)
+    print("Sensitivity Score : ",sensitivity_score(y_test_tmp, y_preds, average='macro'))
+    print("Geometric mean Score : ",geometric_mean_score(y_test_tmp, y_preds))
+    print("Accuracy average SVM_",corresp[k]," is ",acc_avg)
+    print("Accuracy SVM_",corresp[k]," is ",acc)
+    print(confusion_matrix(y_test_tmp, y_preds))
 
 
-
-clf = LinearSVC(C=1.0, loss='squared_hinge', penalty='l2',multi_class='ovr')
-clf.fit(X_train, y_train)
-y_preds = clf.predict(X_test)
-b=accuracy_score(y_test, y_preds)
-print("the accuracy for normal SVM is ",b)
  
+#%%
 
 #from sklearn.metrics import average_precision_score
 #b2=average_precision_score(y_test, y_preds) 
@@ -127,15 +157,6 @@ b5=scores.mean()
 print("the Kfold cross validation score for thr one class SVM is ",b5)
 #b6=average_precision_score(y_test, y_preds2) 
 #print(b6)
-#%%
-
-
-#%%
-
-
-
-
-
 
 #%%
 ############################################################################
