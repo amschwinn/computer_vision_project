@@ -11,13 +11,15 @@ Fall Semester 2017
 
 #Set working directory
 import os
-os.chdir('D:/GD/MLDM/Computer Vision Project/github')
+os.chdir('D:/GD/MLDM/Computer_Vision_Project/github/bag_of_words')
 #os.path.dirname(os.path.abspath(__file__))
 os.getcwd()
 
 import features_kmeans as km
 import pandas as pd
 import timeit
+import numpy as np
+import pickle
 
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
@@ -81,8 +83,8 @@ pca_obj_desc['obj_name'] = pd.Series(obj_name)
 obj_kmeans_results, obj_centroids = km.kmeans_per_object(pca_obj_desc,50)
 '''
 #Load bag of words from results files
-os.chdir('D:/GD/MLDM/Computer Vision Project/results')
-obj_centroids = km.load_clusters('D:/GD/MLDM/Computer Vision Project/results')
+os.chdir('D:/GD/MLDM/Computer_Vision_Project/results')
+obj_centroids = km.load_clusters('D:/GD/MLDM/Computer_Vision_Project/results')
 
 #Combine all separate obj centroids into a single group of centroids for our 
 #total bag of visual words
@@ -109,18 +111,18 @@ print(end-start)
 ###############################################################################
 print('Start SVM')
 start = timeit.default_timer()
-
+'''
 #split features and labels
 X = obj_cluster_pivot.drop(['obj_name'],axis=1)
 y = obj_cluster_pivot['obj_name']
 
 #Normalize X
-X = normalize(X)
+X = normalize(X,axis=1)
 
 #Train test split
 X_train, X_test, y_train, y_test = train_test_split(X,y)
 
-'''
+
 #Use grid search to find correct hyperparameter
 #Specify params to iterate over
 tuned_params = [{'kernel': ['rbf','sigmoid'], 'gamma': [1e-3, 1e-4],
@@ -141,14 +143,47 @@ svm_grid_results.to_csv('svm_gridsearch_results.csv')
 end = timeit.default_timer()
 print('SVM Complete')
 print(end-start)
-'''
+
 
 #Create and train SVM model
 svm_clf = svm.SVC(kernel='linear').fit(X_train, y_train) 
 y_pred = svm_clf.predict(X_test)
+svm_acc = accuracy_score(y_test, y_pred)
+'''
+
+#1 class SVM for each object
+svms = {}
+svm_acc = {}
+for key,value in obj_centroids.items():
+    #Get x and y for the object type
+    X = obj_cluster_pivot.drop(['obj_name'],axis=1).copy()
+    y = obj_cluster_pivot['obj_name'].copy()
+    X = normalize(X,axis=1)
+    
+    #Transform into binary classification for 1 class SVMs
+    y[y != key] = '0'
+    y[y == key] = '1'
+    y = y.astype('int64')
+
+    #Train test split
+    X_train, X_test, y_train, y_test = train_test_split(X,y)
+
+    #Train and store svm in dictionary
+    svm_clf = svm.SVC(kernel='linear').fit(X_train,y_train)
+    svms[key] = svm_clf
+    
+    #Store results
+    y_pred = svm_clf.predict(X_test)
+    svm_acc[key] = accuracy_score(y_test, y_pred)
+    
+    print(str(key) + ' svm complete') 
+#%%
+pickle.dump(svms,open('D:/GD/MLDM/Computer_Vision_Project/svms_obj.sav','wb'))    
+pickle.dump(svm_acc,open('D:/GD/MLDM/Computer_Vision_Project/svm_acc_obj.sav','wb')) 
+
 #%%
 
-svm_acc = accuracy_score(y_test, y_pred)
+
 
 #%%
 ###############################################################################

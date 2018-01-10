@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Nov 25 21:12:27 2017
-
-@author: dell1
+Test to find CNN accuracy, precision, and recall
 """
 
 import sys
@@ -143,6 +141,9 @@ for col in pred_class.columns:
             pred_class.loc[row,col] = pred_val/col_sum
         '''
 #%%
+results = pd.DataFrame(columns=['tp','fn','tn','fn','acc','prec',
+                                'rec'])        
+        
 for i in range(1,15,1):
     #pred_class_backup2 = pred_class.copy() 
     pred_class = pred_class_backup2.copy()
@@ -165,8 +166,6 @@ for i in range(1,15,1):
     fp = 0
     tn = 0
     fn = 0
-    results = pd.DataFrame(columns=['tp','fn','tn','fn','acc','prec',
-                                    'rec'])
     for y in pred_class.index:
         for x in pred_class.columns:
             true_val = true_class.loc[y,x] 
@@ -197,8 +196,8 @@ for i in range(1,15,1):
     print(tp/(tp+fn))
     print('#######################################')
     
-        
-
+  
+results.to_csv('NN_results.csv')
         
         
         
