@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Nov 25 21:11:57 2017
+Create and train a single, final Neural Layer.
+Layer is fully integrated and has sigmoid activation function
 
-@author: dell1
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 import keras
 import os

@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-#Load test images
+Load full multi label images
 
-Computer Vision Project
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 
 import pymysql
 import pymysql.cursors
 import json
+from sqlalchemy import create_engine
+import pandas as pd
 
 #%%
 def load_objects_desc(n_objects):
@@ -19,19 +24,30 @@ def load_objects_desc(n_objects):
 
     #conn = pymysql.connect(db='images_db', user='root', passwd='', host='localhost')
     # Query
+    '''
     sql_get_descriptors = "SELECT DISTINCT o.num_img,d.desc_json,o.name \
     FROM (select concat(num_img,'.jpg') as 'num_img',desc_json \
     from desc_img) d INNER JOIN objects o ON  d.num_img = o.num_img \
     GROUP BY num_img, desc_json, name;"
+    '''
+    sql_get_descriptors = "SELECT * \
+    FROM (select concat(num_img,'.jpg') as 'num_img',desc_json \
+    from desc_img) d INNER JOIN objects o ON  d.num_img = o.num_img;"
     
     #specify number of objects to load
     #n_objects = 100000 
     
     #Load data
-    with conn.cursor() as cursor:
+    #with conn.cursor() as cursor:
         # Execute sql reques-
-        cursor.execute(sql_get_descriptors)
-        conn.commit()
+    cursor = conn.cursor()
+    cursor.execute(sql_get_descriptors)
+    conn.commit()
+    
+#%%
+    engine = create_engine("mysql://mldm_gangster:$aint3tienne@mldm-cv-project.cnpjv4qug6jj.us-east-2.rds.amazonaws.com/images_db")
+    #load the table into a data frame
+    digits = pd.read_sql_table("user_digits",engine)
 #%%        
         #iterators and stoarge lists
         it = 0

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec 27 21:42:54 2017
+Load labels for test images
 
-@author: jerem
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 
 import xml.etree.ElementTree as ET

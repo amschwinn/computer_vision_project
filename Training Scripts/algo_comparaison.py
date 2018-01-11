@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Dec 15 23:11:13 2017
+Compare different algorithm results to find best option
 
-@author: dell1
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 
 from keras.applications.vgg16 import VGG16

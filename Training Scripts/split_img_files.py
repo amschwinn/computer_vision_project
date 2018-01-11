@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Oct 25 14:32:50 2017
+Split images into folders according to their class
 
-@author: jerem
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 
 from shutil import copyfile

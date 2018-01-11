@@ -5,8 +5,10 @@ MLDM Computer Vision Project
 Split images training set into 
 test and validation sets
 
-By: Austin Schwinn
-Dec 9, 2017
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 import os
 import random

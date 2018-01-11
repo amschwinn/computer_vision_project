@@ -1,9 +1,12 @@
 
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct  2 12:59:11 2017
+Create a database of the extracted object images
 
-@author: jerem
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 
 import pymysql

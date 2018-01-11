@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Test to find CNN accuracy, precision, and recall
+
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 
 import sys
@@ -26,7 +31,7 @@ Classes=["areoplane","bycicle","bird","boat","bottle","bus","car","cat","chair",
          "sofa","train","TVmonitor"]
 '''
 #Set arguments
-target_size = (229, 229) #fixed size for InceptionV3 architecture
+target_size = (299, 299) #fixed size for InceptionV3 architecture
 threshold = .5
 Classes = os.listdir('D:/GD/MLDM/Computer_Vision_Project/cnn5/data/training')
 model = 'D:/GD/MLDM/Computer_Vision_Project/github/cvp_cnn_sigmoid_10_10.model'

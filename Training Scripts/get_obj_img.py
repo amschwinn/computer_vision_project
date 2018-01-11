@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan  2 21:58:16 2018
+Load extract objects from images
 
-@author: jerem
-"""
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
 
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Oct 25 14:32:50 2017
-
-@author: jerem
+MLDM Master's Year 2
+Fall Semester 2017
 """
 
 from shutil import copyfile

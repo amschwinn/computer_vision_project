@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct  2 16:26:59 2017
-Objects extraction from a given image
-@author: jerem
+Extract objects from images
+
+By: Austin Schwinn, Jérémie Blanchard, and Oussama Bouldjedri.
+
+MLDM Master's Year 2
+Fall Semester 2017
 """
 
 import pymysql
